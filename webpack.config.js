@@ -4,14 +4,15 @@ const fileSystem = require("fs");
 
 
 const pages = fileSystem.readdirSync("./src", { withFileTypes: true })
-    .filter(dirent => dirent.isDirectory())
-    .map(dirent => dirent.name)
+  .filter(dirent => dirent.isDirectory())
+  .map(dirent => dirent.name)
 
 module.exports = {
   entry: pages.reduce((config, page) => {
     config[page] = path.resolve(__dirname, `src/${page}/index.ts`);
     return config;
   }, {}),
+  devtool: "eval-source-map",
 
   module: {
     rules: [
@@ -20,21 +21,33 @@ module.exports = {
         use: 'ts-loader',
         exclude: /node_modules/,
       },
+
+    {
+        test: /\.s[ac]ss$/i,
+        use: [
+          // Creates `style` nodes from JS strings
+          "style-loader",
+          // Translates CSS into CommonJS
+          "css-loader",
+          // Compiles Sass to CSS
+          "sass-loader",
+        ],
+      },
+
     ],
   },
   resolve: {
-    extensions: ['.html', '.ts', '.js'],
+    extensions: ['.html', '.ts', '.js', '.scss'],
   },
   output: {
-    filename: '[name].ts',
+    filename: '[name].js',
     path: path.resolve(__dirname, "dist"),
-    asyncChunks: true,
-
   },
   devServer: {
     static: path.join(__dirname, "dist"),
     compress: true,
     port: 4000,
+    hot: true
   },
   optimization: {
     splitChunks: {
@@ -50,6 +63,6 @@ module.exports = {
           filename: `${page}.html`,
           chunks: [page],
         })
-    )
+    ),
   ),
 };
