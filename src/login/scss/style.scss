@@ -1,3 +1,56 @@
 body {
-    background-color: firebrick;
+  max-width: 100vw;
+  max-height: 100vh;
+  overflow: hidden;
+  background-color: white;
+}
+
+.gradient-custom-2 {
+  /* fallback for old browsers */
+  background: #fccb90;
+
+  /* Chrome 10-25, Safari 5.1-6 */
+  background: -webkit-linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+
+  /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: linear-gradient(to right, #ee7724, #d8363a, #dd3675, #b44593);
+}
+
+.picsum-bg {
+  width: 100%;
+  background-color: #b44593;
+  background-repeat: no-repeat;
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  .gradient-form {
+    height: 100vh !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .gradient-custom-2 {
+    border-top-right-radius: .3rem;
+    border-bottom-right-radius: .3rem;
+  }
+}
+
+.image-cell {
+  width: 100px;
+  height: 100px;
+  flex-wrap: wrap;
+  background-size: cover;
+  background-position: center;
+}
+
+#image-grid {
+  display: flex;
+  flex-wrap: wrap;
+  height: 100vh;
+  width: 130vw;
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  z-index: -1;
 }
