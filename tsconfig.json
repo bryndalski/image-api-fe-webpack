@@ -1,8 +1,10 @@
 {
-    "compilerOptions": {
-        "noImplicitAny": true,
-        "target": "ES6",
-        "module": "ES2022",
-        "rootDir": ".",
-    }
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "target": "ES6",
+    "module": "NodeNext",
+    "rootDir": ".",
+    "moduleResolution": "nodenext",
+    "allowSyntheticDefaultImports": true
+  }
 }
