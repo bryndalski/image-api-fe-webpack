@@ -15,6 +15,7 @@ module.exports = {
     }, {}),
     devtool: "eval-source-map",
 
+
     module: {
         rules: [
             {
@@ -48,7 +49,10 @@ module.exports = {
         static: path.join(__dirname, "dist"),
         compress: true,
         port: 4000,
-        hot: true
+        hot: true,
+        headers: {
+            "Access-Control-Allow-Origin": "*",
+        },
     },
     optimization: {
         splitChunks: {

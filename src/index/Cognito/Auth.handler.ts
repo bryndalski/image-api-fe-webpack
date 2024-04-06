@@ -1,61 +1,92 @@
-import { fetchAuthSession } from '@aws-amplify/core';
-import type { JWT } from 'aws-amplify/auth';
-import { fetchUserAttributes, signIn } from 'aws-amplify/auth';
+import {AuthenticationDetails, CognitoUser, CognitoUserPool, CognitoUserSession} from 'amazon-cognito-identity-js';
 import {LoginResponse} from "../types";
 
+interface PoolData {
+    UserPoolId: string;
+    ClientId: string;
+}
+
+const poolData: PoolData = {
+    UserPoolId: process.env.COGNITO_USER_POOL_ID!,
+    ClientId: process.env.COGNITO_CLIENT_ID!
+};
+
+const userPool = new CognitoUserPool(poolData);
+
+interface AuthenticationData {
+    Username: string;
+    Password: string;
+}
+
 export class CCognitoHandler {
-  //================== LOGIN ==================
-  /**
-   * Login to Cognito with the given username and password.
-   * @param username The username to log in with.
-   * This is the email address.
-   * @param password User password
-   * @returns {Promise<LoginResponse>} Status of login response
-   */
-  public static async login(
-    username: string,
-    password: string,
-  ): Promise<LoginResponse> {
-    try {
-      const { isSignedIn } = await signIn({ username, password });
 
-      return {
-        challengeName:'SUCCESS',
-        isSignedIn,
-      }
+    /**
+     * Logs the user in with the given username and password.
+     * @param username {string} The username of the user.
+     * @param password {string} The password of the user.
+     */
+    public static async login(username: string, password: string): Promise<LoginResponse> {
+        const authenticationData: AuthenticationData = {
+            Username: username,
+            Password: password,
+        };
+        const authenticationDetails = new AuthenticationDetails(authenticationData);
 
-    } catch (error) {
-      console.log('error', error);
-      if (
-        typeof error === 'object' &&
-        error &&
-        'name' in error &&
-        error.name === 'NotAuthorizedException'
-      ) {
-        return { challengeName: 'INVALID_CREDENTIALS', isSignedIn: false };
-      }
-      return { challengeName: 'UNKNOWN_ERROR', isSignedIn: false };
+        const userData = {
+            Username: username,
+            Pool: userPool,
+        };
+        const cognitoUser = new CognitoUser(userData);
+
+        return new Promise((resolve, reject) => {
+            cognitoUser.authenticateUser(authenticationDetails, {
+                onSuccess: function (result: CognitoUserSession) {
+                    console.log('access token + ' + result.getAccessToken().getJwtToken());
+                    resolve({challengeName: 'SUCCESS', isSignedIn: true});
+                },
+
+                onFailure: function (err: any) {
+                    console.error(err);
+                    if (err && err.name === 'NotAuthorizedException') {
+                        resolve({challengeName: 'INVALID_CREDENTIALS', isSignedIn: false});
+                    } else {
+                        resolve({challengeName: 'UNKNOWN_ERROR', isSignedIn: false});
+                    }
+                },
+            });
+        });
     }
-  }
 
-  /**
-   * Extracts the user roles from the user attributes.
-   * @returns {Promise<SystemRoles[]>} The user roles from cognito.
-   * @throws {Error} If the user is not logged in.
-   *
-   * @example
-   * const userRoles = await CCognitoHandler.getUserGroups();
-   * userRoles // ['root']
-   *
-   * @example
-   * const userRoles = await CCognitoHandler.getUserGroups(); // throws Error('NotAuthorizedException')
-   *
-   */
-  public static async getUserGroups(): Promise<string[]> {
-    const { tokens } = await fetchAuthSession();
-    if (!tokens || !tokens.idToken) throw Error('NotAuthorizedException');
-    const idToken: JWT = tokens.idToken;
-    return (idToken.payload['cognito:groups'] as string[]) || [];
-  }
+    /**
+     * Defines whether the user is currently logged in.
+     */
+    public static isLogged(): Promise<boolean> {
+        return new Promise((resolve, reject) => {
+            resolve(!!userPool.getCurrentUser())
+        })
+    }
+
+
+    /**
+     * Fetches the JWT token for the current user.
+     */
+    public static async fetchToken(): Promise<string> {
+        return new Promise((resolve, reject) => {
+            const cognitoUser = userPool.getCurrentUser();
+            if (cognitoUser) {
+                cognitoUser.getSession(function (err:any, session:any) {
+                    if (err) {
+                        console.error(err);
+                        reject(err);
+                    } else {
+                        resolve(session!.getIdToken().getJwtToken());
+                    }
+                });
+            } else {
+                reject('No user found');
+            }
+        });
+
+    }
 
 }

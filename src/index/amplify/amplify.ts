@@ -1,6 +1,11 @@
 import {Amplify} from "aws-amplify";
 
 export const configureAmplify = () => {
+
+  console.log({
+    env: process.env.COGNITO_CLIENT_ID
+
+  })
   Amplify.configure({
     Auth: {
       Cognito: {

@@ -5,7 +5,15 @@ import {CCognitoHandler} from "../index/Cognito/Auth.handler";
 configureAmplify();
 
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", async function () {
+
+    if (await CCognitoHandler.isLogged()) {
+        // window.location.href = 'index.html';
+    } else
+    {
+
+    }
+
     const imageGrid = document.getElementById('image-grid');
     for (let i = 0; i < 100; i++) {
         const cell = document.createElement('div');
@@ -44,12 +52,12 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        const  {challengeName,isSignedIn}  =  await  CCognitoHandler.login(email, password)
+        const {challengeName, isSignedIn} = await CCognitoHandler.login(email, password)
 
-             if (isSignedIn) {
-                 window.location.href = '/dashboard';
-             } else {
-                 errorElement.innerText = challengeName === 'INVALID_CREDENTIALS' ? 'Invalid credentials' : 'An unknown error occurred';
-             }
+        if (isSignedIn) {
+            window.location.href = '/index.html';
+        } else {
+            errorElement.innerText = challengeName === 'INVALID_CREDENTIALS' ? 'Invalid credentials' : 'An unknown error occurred';
+        }
     });
 }, {once: true});

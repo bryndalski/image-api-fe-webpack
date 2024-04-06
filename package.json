@@ -38,6 +38,7 @@
     "@mui/material": "^5.15.14",
     "@types/amplify": "^1.1.28",
     "@types/uuid": "^9.0.8",
+    "amazon-cognito-identity-js": "^6.3.12",
     "aws-amplify": "^6.0.25",
     "axios": "^1.6.8",
     "css-loader": "^6.10.0",

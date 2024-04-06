@@ -1,14 +1,15 @@
 import axios from 'axios';
 import {fetchUserAttributes} from '@aws-amplify/auth';
+import {CCognitoHandler} from "../Cognito/Auth.handler";
 
-const instance = axios.create({
-    baseURL: 'https://your-api-url.com',
+const AxiosNetworking = axios.create({
+    baseURL: 'http://127.0.0.1:3000/api',
     timeout: 10000,
 });
 
-instance.interceptors.request.use(async function (config) {
-    const {idToken} = await fetchUserAttributes();
+AxiosNetworking.interceptors.request.use(async function (config) {
+    const idToken = await CCognitoHandler.fetchToken();
     config.headers.Authorization = idToken ? `Bearer ${idToken}` : '';
     return config;
 });
-export default instance;
+export default  AxiosNetworking;
