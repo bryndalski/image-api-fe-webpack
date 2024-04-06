@@ -24,6 +24,7 @@ export class CCognitoHandler {
      * Logs the user in with the given username and password.
      * @param username {string} The username of the user.
      * @param password {string} The password of the user.
+     * @returns {Promise<LoginResponse>} A promise that resolves to a LoginResponse object.
      */
     public static async login(username: string, password: string): Promise<LoginResponse> {
         const authenticationData: AuthenticationData = {
@@ -59,9 +60,11 @@ export class CCognitoHandler {
 
     /**
      * Defines whether the user is currently logged in.
+     * @async
+     * @returns {Promise<boolean>} A promise that resolves to a boolean value. True if the user is logged in, false otherwise.
      */
     public static isLogged(): Promise<boolean> {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             console.log(!!userPool.getCurrentUser())
             resolve(!!await userPool.getCurrentUser())
         })

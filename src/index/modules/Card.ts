@@ -1,4 +1,4 @@
-import {FakeReactType} from "../types/FakeReact.type";
+import type {FakeReactType} from "../types";
 import {v4} from "uuid";
 
 /**
@@ -7,12 +7,13 @@ import {v4} from "uuid";
 export class Card implements FakeReactType {
 
     componentId: string;
+
     constructor(public imageUrl: string, public name: string, public isFavorited: boolean) {
         this.componentId = v4()
     }
 
     /**
-     * Returns html string
+     * Returns html string with styled card
      */
     render(): string {
         return `

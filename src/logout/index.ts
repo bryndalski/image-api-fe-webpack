@@ -12,6 +12,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     setTimeout(() => {
         CCognitoHandler.logout()
         window.location.href = '/login.html';
-    },3000)
+    }, 3000)
 
 })

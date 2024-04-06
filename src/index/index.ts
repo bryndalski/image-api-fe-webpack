@@ -34,8 +34,9 @@ document.addEventListener("DOMContentLoaded", async function () {
     body.innerHTML += new Navbar().render()
     body.innerHTML += `
        <button type="button" class="btn btn-primary m-2" data-toggle="modal" data-target="#myModal">
-  Add Image
-</button>`
+            Add Image
+        </button>
+    `
 
 
     const cardList = new CardList()

@@ -13,8 +13,6 @@ window.addEventListener('load', async () => {
 
 
 document.addEventListener("DOMContentLoaded", async function () {
-
-
     const imageGrid = document.getElementById('image-grid');
     for (let i = 0; i < 150; i++) {
         const cell = document.createElement('div');
@@ -30,7 +28,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const errorElement = document.createElement('p');
     errorElement.style.color = 'red';
     form.appendChild(errorElement);
-
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
