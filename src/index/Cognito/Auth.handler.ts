@@ -61,8 +61,9 @@ export class CCognitoHandler {
      * Defines whether the user is currently logged in.
      */
     public static isLogged(): Promise<boolean> {
-        return new Promise((resolve, reject) => {
-            resolve(!!userPool.getCurrentUser())
+        return new Promise(async(resolve, reject) => {
+            console.log(!!userPool.getCurrentUser())
+            resolve(!!await userPool.getCurrentUser())
         })
     }
 
@@ -74,7 +75,7 @@ export class CCognitoHandler {
         return new Promise((resolve, reject) => {
             const cognitoUser = userPool.getCurrentUser();
             if (cognitoUser) {
-                cognitoUser.getSession(function (err:any, session:any) {
+                cognitoUser.getSession(function (err: any, session: any) {
                     if (err) {
                         console.error(err);
                         reject(err);
@@ -87,6 +88,20 @@ export class CCognitoHandler {
             }
         });
 
+    }
+
+
+    /**
+     * Logs the user out.
+     */
+    public static logout(): void {
+        const cognitoUser = userPool.getCurrentUser();
+        if (cognitoUser) {
+            cognitoUser.signOut();
+            window.location.href = '/login.html';
+        } else {
+            console.log('No user is currently logged in');
+        }
     }
 
 }

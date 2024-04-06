@@ -5,23 +5,23 @@ import {CCognitoHandler} from "../index/Cognito/Auth.handler";
 configureAmplify();
 
 
+window.addEventListener('load', async () => {
+    if (await CCognitoHandler.isLogged()) {
+        window.location.href = '/index.html';
+    }
+})
+
+
 document.addEventListener("DOMContentLoaded", async function () {
 
-    if (await CCognitoHandler.isLogged()) {
-        // window.location.href = 'index.html';
-    } else
-    {
-
-    }
 
     const imageGrid = document.getElementById('image-grid');
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 150; i++) {
         const cell = document.createElement('div');
         cell.classList.add('image-cell');
         cell.style.backgroundImage = `url('https://picsum.photos/100/100/?random&t=${new Date().getTime() + Math.random() * 1000}')`;
         imageGrid.appendChild(cell);
     }
-    console.log("ddd3")
 
 
     const form = document.querySelector('#login_form');
@@ -31,7 +31,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     errorElement.style.color = 'red';
     form.appendChild(errorElement);
 
-    console.log("HE1HE")
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();

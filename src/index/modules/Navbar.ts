@@ -29,7 +29,7 @@ render(): string {
                         </a>
                         <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                             <li><a class="dropdown-item" href="#">Show Profile</a></li>
-                            <li><a class="dropdown-item" href="#">Log Out</a></li>
+                            <li><a class="dropdown-item" href="logout.html" id="log-out">Log Out</a></li>
                         </ul>
                     </li>
                 </ul>

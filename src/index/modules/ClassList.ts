@@ -1,8 +1,7 @@
-import type {CardType} from "../types/Cart.type";
-import {FakeReactType} from "../types/FakeReact.type";
+import type {CardType} from "../types";
+import type {FakeReactType} from "../types";
 import {v4} from "uuid";
 export class CardList implements FakeReactType{
-    cards: {[key: string]: CardType } = {};
     componentId: string;
     constructor() {
         this.componentId = v4();
@@ -13,9 +12,7 @@ export class CardList implements FakeReactType{
 
     render(): string {
         return  `
-        <div class="d-flex justify-content-center align-items-center vh-100 vw-100 bg-red-100" id="${this.componentId}">
-            <div id="card-list" class="mx-auto my-auto"></div>
-        </div>
+        <div id="card-list"></div>
         `
     }
     destroy(): void {

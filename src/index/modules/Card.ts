@@ -16,8 +16,8 @@ export class Card implements FakeReactType {
      */
     render(): string {
         return `
-            <div class="card" style="width: 18rem;" id="${this.componentId}">
-                <img src="${this.imageUrl}" class="card-img-top" alt="${this.name}">
+            <div class="card" style="width: 18rem; height: 20rem" id="${this.componentId}">
+                <img src="${this.imageUrl}" class="card-img-top" style="height: 15rem" alt="${this.name}">
                 <div class="card-body">
                     <h5 class="card-title">${this.name}</h5>
                     <p class="card-text">${this.isFavorited ? '❤️' : '♡'}</p>
